@@ -29,7 +29,7 @@ app.post("/todos", (req, res) => {
 app.get("/todos/:id", (req, res) => {
   const id = req.params.id;
   if (!id) return res.status(400).send({ message: "Id not found in body" });
-  const todo = todos.find((item) => item.id === Number(id));
+  const todo = todos.find((item) => item.id === id);
   if (!todo) return res.status(400).send({ message: "Todo not found" });
   fs.writeFileSync("./data.json", JSON.stringify(todos), "utf-8");
   return res.send(todo);
@@ -38,19 +38,29 @@ app.get("/todos/:id", (req, res) => {
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
   if (!id) return res.status(400).send({ message: "Id not found!" });
-  const index = todos.findIndex((item) => item.id === Number(id));
+  const index = todos.findIndex((item) => item.id === id);
   if (index === -1)
-    return res.status(400).send({ message: `${Number(id)} tai todo alga` });
+    return res.status(400).send({ message: `${id} tai todo alga` });
   todos.splice(index, 1);
   fs.writeFileSync("./data.json", JSON.stringify(todos), "utf-8");
-  return res.status(200).send({ message: `${Number(id)} dh id ustlaa` });
+  return res.status(200).send({ message: `${id} dh id ustlaa` });
 });
 
-app.put("/todos/:id", (req, res) => {
-  const id = req.params.id;
-  if (!id) return res.status(400).send({ message: "Id not found!" });
-  // TODO update functions
-});
+// app.put("/todos/:id", (req, res) => {
+//   const id = req.params.id;
+//   if (!id) return res.status(400).send({ message: "Id not found!" });
+//   const index = todos.findIndex((item) => item.id === id);
+//   if (index === -1)
+//     return res.status(400).send({ message: `${id} tai todo alga` });
+//   const userChecked = todos.find((item) => item.checked);
+//   if (!userChecked) {
+//     return res.status(400).send({ message: `checked alga` });
+//   } else {
+//     todos[index].checked = !todos[index].checked;
+//   }
+//   fs.writeFileSync("./data.json", JSON.stringify(todos), "utf-8");
+//   return res.status(200).send({ message: `${id} dh id uurchlugdluu` });
+// });
 
 app.listen(PORT, () => {
   const data = fs.readFileSync("./data.json", "utf-8");
